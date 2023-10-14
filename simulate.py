@@ -9,7 +9,8 @@ speed_of_sound = 343  # m/s
 # Define room dimensions
 
 # Sampling frequency
-fs=44100
+#fs=44100
+fs=8000
 
 # Create anechoic room (free-field simulation)
 room = pra.AnechoicRoom(fs=fs)
@@ -54,8 +55,8 @@ def calculate_travel_times(source_positions, mic_positions, speed_of_sound):
 #                  np.sin(2 * np.pi * 2000 * np.arange(fs * 1) / fs)]
 
 # Reading the WAV file
-fs_source, source_signal_1 = load_sound_source('frequency_sweep_single_down.wav')
-_, source_signal_2 = load_sound_source('frequency_sweep_single_up.wav')
+fs_source, source_signal_1 = load_sound_source('frequency_sweep_triple_up.wav')
+_, source_signal_2 = load_sound_source('frequency_sweep_triple_down.wav')
 
 
 source_signals = [source_signal_1, source_signal_2]
@@ -66,7 +67,7 @@ for sig, pos in zip(source_signals, source_positions):
     room.add_source(pos, signal=sig)
 
 # Add microphones
-mic_positions = [[4.95, 1, 0], [4.95, 1.1, 0]]
+mic_positions = [[1, 1, 0], [1, 2, 0]]
 mic_array = pra.MicrophoneArray(np.array(mic_positions).T, room.fs)    # two microphones
 room.add_microphone_array(mic_array)
 
@@ -114,7 +115,7 @@ wavfile.write('recorded_stereo.wav', fs_source, recordings_stereo)
 
 # Plot the spectrogram for each microphone
 window_size = 1024
-shift = int(window_size*0.5)
+shift = 5
 
 # Define a figure and axis array for subplots
 fig, axs = plt.subplots(1, 2, figsize=(14, 6))  # 1 row, 2 columns, and setting a figure size
